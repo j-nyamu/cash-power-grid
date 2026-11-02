@@ -14,7 +14,7 @@ from .extensions import db
 from .models import Access, Activity, Meter
 
 # ---------------------------------------------------------------- translations
-LANGS = {"en": "English", "fr": "Français", "rw": "Kinyarwanda"}
+LANGS = {"en": "English", "rw": "Kinyarwanda"}
 _DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "translations")
 _TEXT = {}
 for _code in LANGS:

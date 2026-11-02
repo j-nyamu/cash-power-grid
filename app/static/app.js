@@ -139,7 +139,7 @@ wirePasswordChecklist('rpw', 'rcf', 'rchecks', function (v) { var b = document.g
     if (!(m > 0) || !(u > 0)) { out.d.textContent = '–'; out.k.textContent = '–'; out.t.textContent = '–'; if (out.r) out.r.innerHTML = ''; return; }
     var c = calc(m, Math.max(used, 0)), days = Math.floor(c.total / u);
     var buy = new Date(); buy.setDate(buy.getDate() + Math.max(days - 2, 0));
-    var loc = document.documentElement.lang === 'fr' ? 'fr-FR' : 'en-GB';
+    var loc = 'en-GB';
     out.d.textContent = days; out.k.textContent = c.total.toFixed(1);
     out.t.textContent = buy.toLocaleDateString(loc, { weekday: 'short', day: 'numeric', month: 'short' });
     if (out.r) out.r.innerHTML = c.rows.map(function (r) { return '<div><span>' + r.label + '</span><b>' + r.kwh.toFixed(1) + ' kWh</b></div>'; }).join('');
