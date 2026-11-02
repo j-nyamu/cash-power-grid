@@ -4,6 +4,8 @@ Setup (PowerShell, from the folder that holds the .sql files):
     pip install pymysql sqlparse
     python run_sql.py
 
+Add --reset to DROP the whole cashpower database first (development only; you must type RESET).
+
 You are asked for the host, port, user and password. To skip the prompts, set
 DB_HOST, DB_PORT, DB_USER and DB_PASSWORD as environment variables.
 Optional: set DB_CA to the path of Aiven's CA certificate (ca.pem) to verify the server.
@@ -22,9 +24,8 @@ FILES = [
     "01_auth.sql",
     "02_meters.sql",
     "03_usage.sql",
-    "04_alerts.sql",
-    "05_ussd.sql",
-    "06_changes.sql",
+    "04_activity.sql",
+    "05_changes.sql",
 ]
 
 HERE = pathlib.Path(__file__).resolve().parent
@@ -39,6 +40,13 @@ def statements(path):
 
 
 def main():
+    files = list(FILES)
+    if "--reset" in sys.argv:
+        answer = input("This DROPS the whole cashpower database and all its data. Type RESET to continue: ")
+        if answer.strip() != "RESET":
+            sys.exit("Cancelled.")
+        files = ["reset_dev.sql"] + files
+
     host = os.environ.get("DB_HOST") or input("Host: ").strip()
     port = int(os.environ.get("DB_PORT") or input("Port: ").strip())
     user = os.environ.get("DB_USER") or input("User [avnadmin]: ").strip() or "avnadmin"
@@ -53,7 +61,7 @@ def main():
                            ssl=ssl, autocommit=True, connect_timeout=15)
     print("Connected.")
 
-    for name in FILES:
+    for name in files:
         path = HERE / name
         if not path.exists():
             print(f"Missing file: {name}")
